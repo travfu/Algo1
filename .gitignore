@@ -3,5 +3,6 @@ Python
 .vscode
 algs4.jar
 
-week 1 - percolation/*
-!week 1 - percolation/Percolation.java
+week1_percolation/*
+!week1_percolation/Percolation.java
+!week1_percolation/PercolationStats.java
