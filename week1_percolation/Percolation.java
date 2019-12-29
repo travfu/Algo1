@@ -16,6 +16,10 @@ public class Percolation {
     // grid also includes a virtual top and bot site, which all top and bottom
     // rows are connected to via a union.
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("n must be > 0");
+        }
+
         int gridSize = n * n + 2; // +2 for virtual top and bot
         openSites = new boolean[gridSize];
         grid = new WeightedQuickUnionUF(gridSize);
@@ -24,7 +28,9 @@ public class Percolation {
     }
 
     // opens the site (row, col) if it is not open already
-    // public void open(int row, int col)
+    public void open(int row, int col) {
+
+    }
 
     // is the site (row, col) open?
     // public boolean isOpen(int row, int col)
