@@ -8,10 +8,11 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private int[] threshold;
+    private static final double CONF_LEVEL = 1.96;
+
+    private final int[] threshold;
     private final int trials;
     private final int n;
-    private final double confLevel = 1.96;
 
     private double meanValue;
     private double stddevValue;
@@ -79,7 +80,7 @@ public class PercolationStats {
     public double confidenceLo() {
         double mean = getMean();
         double stddev = getStddev();
-        double loCI = mean - (confLevel * stddev) / Math.sqrt(trials);
+        double loCI = mean - (CONF_LEVEL * stddev) / Math.sqrt(trials);
         return loCI;
     }
 
@@ -87,7 +88,7 @@ public class PercolationStats {
     public double confidenceHi() {
         double mean = getMean();
         double stddev = getStddev();
-        double hiCI = mean + (confLevel * stddev) / Math.sqrt(trials);
+        double hiCI = mean + (CONF_LEVEL * stddev) / Math.sqrt(trials);
         return hiCI;
     }
 

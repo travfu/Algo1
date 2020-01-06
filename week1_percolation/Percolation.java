@@ -11,8 +11,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private boolean[] openSites;
     private int openCount;
-    private WeightedQuickUnionUF grid;
-    private WeightedQuickUnionUF fullSites;
+    private final WeightedQuickUnionUF grid;
+    private final WeightedQuickUnionUF fullSites;
     private final int n;
     private final int virtualTop;
     private final int virtualBot;
@@ -52,7 +52,12 @@ public class Percolation {
             throw new IllegalArgumentException(msg);
         }
 
+
         int i = getIndexOf(row, col);
+        if (openSites[i]) {
+            return;
+        }
+
         openSites[i] = true;
         openCount++;
 
@@ -148,5 +153,7 @@ public class Percolation {
             int j = in.readInt();
             p.open(i, j);
         }
+        p.open(1, 1);
+        System.out.println(p.numberOfOpenSites());
     }
 }
