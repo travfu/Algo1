@@ -15,3 +15,8 @@ week2_deque_and_randomised_queues/*
 !week2_deque_and_randomised_queues/Deque.java
 !week2_deque_and_randomised_queues/RandomizedQueue.java
 !week2_deque_and_randomised_queues/Permutation.java
+
+week3_collinear_points/*
+!week3_collinear_points/BruteCollinearPoints.java
+!week3_collinear_points/FastCollinearPoints.java
+!week3_collinear_points/Point.java
