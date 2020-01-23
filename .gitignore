@@ -1,10 +1,17 @@
+# local folders
 lecture videos
 Python
+
+# environment
 .vscode
+.idea
 algs4.jar
 
 week1_percolation/*
 !week1_percolation/Percolation.java
 !week1_percolation/PercolationStats.java
 
-week2_queues/*
+week2_deque_and_randomised_queues/*
+!week2_deque_and_randomised_queues/Deque.java
+!week2_deque_and_randomised_queues/RandomizedQueue.java
+!week2_deque_and_randomised_queues/Permutation.java
