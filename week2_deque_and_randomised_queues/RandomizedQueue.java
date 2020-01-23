@@ -4,19 +4,21 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private Item[] q;
-    private int tail;
-    private int arraySize;
+    private Item[] q;       // array to store items in queue
+    private int tail;       // index of empty spot adjacent to tail; equates to item count in queue
+    private int arraySize;  
 
 
     public RandomizedQueue() {
-        q = (Item[]) new Object[1];
-        tail = 0;
         arraySize = 1;
+        q = newGenericArray(arraySize);
+        tail = 0;
     }
 
     private Item[] newGenericArray(int size) {
         return (Item[]) new Object[size];
+        // The above will prompt a compile warning, but is allowed for this
+        // problem set.
     }
 
     public boolean isEmpty() {
@@ -27,14 +29,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return tail;
     }
 
-    // add the item
     public void enqueue(Item item) {
-        validateItem(item);
+        if (item == null) throw new IllegalArgumentException();
         autoGrowArray();
         q[tail++] = item;
     }
 
-    // remove and return a random item
     public Item dequeue() {
         assertNotEmpty();
         int randomIndex = getRandomIndex(tail);
@@ -47,16 +47,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return item;
     }
 
-    private void validateItem(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     private void assertNotEmpty() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
+    }
+
+    private int getRandomIndex(int max) {
+        return StdRandom.uniform(max);
     }
 
     private void autoGrowArray() {
@@ -74,7 +72,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private Item[] resizeArray(int newSize) {
-        Item[] newArray = (Item[]) new Object[newSize];
+        Item[] newArray = newGenericArray(newSize);
         return copyItems(newArray);
     }
 
@@ -85,16 +83,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return newArray;
     }
 
-    private int getRandomIndex(int max) {
-        return StdRandom.uniform(max);
-    }
-
     public Item sample() {
         assertNotEmpty();
         return q[getRandomIndex(tail)];
     }
 
-    // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
         return new ArrayIterator();
     }
