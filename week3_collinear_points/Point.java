@@ -119,6 +119,74 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        // slopeTo tests:
+        System.out.println("Tests for slopeTo()");
+        // vertical points should return positive infinity
+        Point v1 = new Point(1, 1);
+        Point v2 = new Point(1, 3);
+        System.out.printf("  %-20s", "vertical");
+        if (v1.slopeTo(v2) == Double.POSITIVE_INFINITY) System.out.println(".");
+        else                                            System.out.println("F");
+
+        // horizontal points should return 0
+        Point h1 = new Point(1, 1);
+        Point h2 = new Point(3, 1);
+        System.out.printf("  %-20s", "horizontal");
+        if (h1.slopeTo(h2) == 0.0) System.out.println(".");
+        else                       System.out.println("F");
+
+        // degenerate (equal) points should return negative infinity
+        Point d1 = new Point(1, 1);
+        Point d2 = new Point(1, 1);
+        System.out.printf("  %-20s", "degenerate");
+        if (d1.slopeTo(d2) == Double.NEGATIVE_INFINITY) System.out.println(".");
+        else                                            System.out.println("F");
+
+        // valid slope should return slope value
+        Point s1 = new Point(1, 1);
+        Point s2 = new Point(3, 3);
+        System.out.printf("  %-20s", "normal slope");
+        if (s1.slopeTo(s2) == 1.0) System.out.println(".");
+        else                       System.out.println("F");
+
+        // assert int is casted into double
+        // (int) 1 / 2 == 0         incorrect
+        // (double) 1 / 2 == 0.5    correct
+        Point a1 = new Point(1, 1);
+        Point b1 = new Point(3, 2);
+        System.out.printf("  %-20s", "(double) casting");
+        if (a1.slopeTo(b1) == 0.5) System.out.println(".");
+        else                       System.out.println("F");
+
+
+        // compareTo tests:
+        System.out.println("\nTests for compareTo()");
+
+        // equal should return 0
+        Point a2 = new Point(3, 4);
+        System.out.printf("  %-20s", "equal points");
+        if (a2.compareTo(a2) == 0) System.out.println(".");
+        else                       System.out.println("F");
+
+        // if smaller, should return negative int (-1); case 1
+        Point a3 = new Point(1, 1);
+        Point b3 = new Point(1, 2);
+        System.out.printf("  %-20s", "a < b; case1");
+        if (a3.compareTo(b3) < 0)  System.out.println(".");
+        else                       System.out.println("F");
+
+        // if smaller, should return negative int (-1); case 2
+        Point a4 = new Point(1, 1);
+        Point b4 = new Point(2, 1);
+        System.out.printf("  %-20s", "a < b; case2");
+        if (a4.compareTo(b4) < 0)  System.out.println(".");
+        else                       System.out.println("F");
+
+        // if larger, should return positive int (+1)
+        Point a5 = new Point(2, 2);
+        Point b5 = new Point(1, 1);
+        System.out.printf("  %-20s", "a < b; case2");
+        if (a5.compareTo(b5) > 0)  System.out.println(".");
+        else                       System.out.println("F");
     }
 }
