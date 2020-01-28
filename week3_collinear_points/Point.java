@@ -119,44 +119,46 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
+        class TestHelper {
+            public void pass(String txt) {System.out.printf("  %-20s %s\n", txt, ".");}
+            public void fail(String txt) {System.out.printf("  %-20s %s\n", txt, "F");}
+        }
+        TestHelper print = new TestHelper();
+
+
         // slopeTo tests:
         System.out.println("Tests for slopeTo()");
         // vertical points should return positive infinity
         Point v1 = new Point(1, 1);
         Point v2 = new Point(1, 3);
-        System.out.printf("  %-20s", "vertical");
-        if (v1.slopeTo(v2) == Double.POSITIVE_INFINITY) System.out.println(".");
-        else                                            System.out.println("F");
+        if (v1.slopeTo(v2) == Double.POSITIVE_INFINITY) print.pass("vertical");
+        else                                            print.fail("vertical");
 
         // horizontal points should return 0
         Point h1 = new Point(1, 1);
         Point h2 = new Point(3, 1);
-        System.out.printf("  %-20s", "horizontal");
-        if (h1.slopeTo(h2) == 0.0) System.out.println(".");
-        else                       System.out.println("F");
+        if (h1.slopeTo(h2) == 0.0) print.pass("horizontal");
+        else                       print.fail("horizontal");
 
         // degenerate (equal) points should return negative infinity
         Point d1 = new Point(1, 1);
         Point d2 = new Point(1, 1);
-        System.out.printf("  %-20s", "degenerate");
-        if (d1.slopeTo(d2) == Double.NEGATIVE_INFINITY) System.out.println(".");
-        else                                            System.out.println("F");
+        if (d1.slopeTo(d2) == Double.NEGATIVE_INFINITY) print.pass("degenerate");
+        else                                            print.fail("degenerate");
 
         // valid slope should return slope value
         Point s1 = new Point(1, 1);
         Point s2 = new Point(3, 3);
-        System.out.printf("  %-20s", "normal slope");
-        if (s1.slopeTo(s2) == 1.0) System.out.println(".");
-        else                       System.out.println("F");
+        if (s1.slopeTo(s2) == 1.0) print.pass("normal slope");
+        else                       print.fail("normal slope");
 
         // assert int is casted into double
         // (int) 1 / 2 == 0         incorrect
         // (double) 1 / 2 == 0.5    correct
         Point a1 = new Point(1, 1);
         Point b1 = new Point(3, 2);
-        System.out.printf("  %-20s", "(double) casting");
-        if (a1.slopeTo(b1) == 0.5) System.out.println(".");
-        else                       System.out.println("F");
+        if (a1.slopeTo(b1) == 0.5) print.pass("(double) casting");
+        else                       print.fail("(double) casting");
 
 
         // compareTo tests:
@@ -164,29 +166,25 @@ public class Point implements Comparable<Point> {
 
         // equal should return 0
         Point a2 = new Point(3, 4);
-        System.out.printf("  %-20s", "equal points");
-        if (a2.compareTo(a2) == 0) System.out.println(".");
-        else                       System.out.println("F");
+        if (a2.compareTo(a2) == 0) print.pass("equal points");
+        else                       print.fail("equal points");
 
         // if smaller, should return negative int (-1); case 1
         Point a3 = new Point(1, 1);
         Point b3 = new Point(1, 2);
-        System.out.printf("  %-20s", "a < b; case1");
-        if (a3.compareTo(b3) < 0)  System.out.println(".");
-        else                       System.out.println("F");
+        if (a3.compareTo(b3) < 0)  print.pass("a < b; case1");
+        else                       print.fail("a < b; case1");
 
         // if smaller, should return negative int (-1); case 2
         Point a4 = new Point(1, 1);
         Point b4 = new Point(2, 1);
-        System.out.printf("  %-20s", "a < b; case2");
-        if (a4.compareTo(b4) < 0)  System.out.println(".");
-        else                       System.out.println("F");
+        if (a4.compareTo(b4) < 0)  print.pass("a < b; case2");
+        else                       print.fail("a < b; case2");
 
         // if larger, should return positive int (+1)
         Point a5 = new Point(2, 2);
         Point b5 = new Point(1, 1);
-        System.out.printf("  %-20s", "a < b; case2");
-        if (a5.compareTo(b5) > 0)  System.out.println(".");
-        else                       System.out.println("F");
+        if (a5.compareTo(b5) > 0)  print.pass("a > b");
+        else                       print.fail("a > b");
     }
 }
