@@ -99,9 +99,25 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        /* YOUR CODE HERE */
+        return new BySlope(this);
     }
 
+    private static class BySlope implements Comparator<Point> {
+        private final Point ref;  
+
+        public BySlope(Point point) {
+            this.ref = point;
+        }
+        
+        public int compare(Point v, Point w) {
+            double vSlope = this.ref.slopeTo(v);
+            double wSlope = this.ref.slopeTo(w);
+            
+            if (vSlope == wSlope)     {return 0;}
+            else if (vSlope < wSlope) {return -1;}
+            else                      {return 1;}
+        }
+    }
 
     /**
      * Returns a string representation of this point.
@@ -186,5 +202,65 @@ public class Point implements Comparable<Point> {
         Point b5 = new Point(1, 1);
         if (a5.compareTo(b5) > 0)  print.pass("a > b");
         else                       print.fail("a > b");
+
+        
+        // slopeOrder & BySlope Comparator tests:
+        System.out.println("\nTests for slopeTo() Comparator");
+
+        // v < w
+        Point a6 = new Point(2,2);
+        Point v6 = new Point(5,3);
+        Point w6 = new Point(3,5);
+        Comparator<Point> comp6 = a6.slopeOrder();
+        if (comp6.compare(v6, w6) == -1) print.pass("v < w");
+        else                             print.fail("v < w");
+
+        // v==w
+        Point a7 = new Point(3,3);
+        Point v7 = new Point(5,5);
+        Point w7 = new Point(1,1);
+        Comparator<Point> C7 = a7.slopeOrder();
+        if (C7.compare(v7, w7) == 0) print.pass("v==w (degenerate)");
+        else                         print.fail("v==w (degenerate)");
+        
+        // v==w (horizontal)
+        Point a8 = new Point(3,2);
+        Point v8 = new Point(1,2);
+        Point w8 = new Point(5,2);
+        Comparator<Point> C8 = a8.slopeOrder();
+        if (C8.compare(v8, w8) == 0) print.pass("v==w (horizontal)");
+        else                         print.fail("v==w (horizontal)");
+
+        // v==w (vertical)
+        Point a9 = new Point(3,3);
+        Point v9 = new Point(3,5);
+        Point w9 = new Point(3,1);
+        Comparator<Point> C9 = a9.slopeOrder();
+        if (C9.compare(v9, w9) == 0) print.pass("v==w (vertical)");
+        else                         print.fail("v==w (vertical)");
+        
+        // vertical + slope
+        Point a10 = new Point(3,3);
+        Point v10 = new Point(3,1);
+        Point w10 = new Point(5,5);
+        Comparator<Point> C10 = a10.slopeOrder();
+        if (C10.compare(v10, w10) == 1) print.pass("vertical + slope");
+        else                            print.fail("vertical + slope");
+
+        // horizonal + slope
+        Point a11 = new Point(3,3);
+        Point v11 = new Point(5,3);
+        Point w11 = new Point(5,5);
+        Comparator<Point> C11 = a11.slopeOrder();
+        if (C11.compare(v11, w11) == -1) print.pass("horizonal + slope");
+        else                             print.fail("horizonal + slope");
+
+        // degenerate + slope
+        Point a12 = new Point(3,3);
+        Point v12 = a12;
+        Point w12 = new Point(5,5);
+        Comparator<Point> C12 = a12.slopeOrder();
+        if (C12.compare(v12, w12) == -1) print.pass("degenerate + slope");
+        else                             print.fail("degenerate + slope");
     }
 }
