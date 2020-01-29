@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class BruteCollinearPoints {
     private ArrayList<LineSegment> lines = new ArrayList<>();
+    private int lineCount = 0;
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
@@ -26,7 +27,25 @@ public class BruteCollinearPoints {
                         assertNotNull(r);
                         assertNotNull(s);
 
-                        if (isCollinear(p, q, r, s)) lines.add(new LineSegment(p, q));
+                        double pq = p.slopeTo(q);
+                        double pr = p.slopeTo(r);
+                        double ps = p.slopeTo(s);
+
+                        assertNotDuplicate(pq);
+                        assertNotDuplicate(pr);
+                        assertNotDuplicate(ps);
+
+                        // points are collinear
+                        if (pq == pr && pr == ps) {
+                            lines.add(new LineSegment(p, q));
+                            lineCount++;
+                        }
+                        // first 3 points are not collinear
+                        // if the first 3 points are not collinear, checking
+                        // the fourth point is unnecessary.
+                        else if (pq != pr) {
+                            break;
+                        }
                     }
                 }
             }
@@ -41,26 +60,13 @@ public class BruteCollinearPoints {
         if (point == null) throw new IllegalArgumentException();
     }
 
-    private boolean isCollinear(Point p, Point q, Point r, Point s) {
-        double pq = p.slopeTo(q);
-        double pr = p.slopeTo(r);
-        double ps = p.slopeTo(s);
-
-        assertNotDuplicate(pq);
-        assertNotDuplicate(pr);
-        assertNotDuplicate(ps);
-
-        if (pq == pr && pr == ps) return true;
-        else return false;
-    }
-
     private void assertNotDuplicate(double slope) {
         if (slope == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
     }
 
     // the number of line segments
     public int numberOfSegments() {
-        return lines.size();
+        return lineCount;
     }
 
     // the line segments
