@@ -7,33 +7,25 @@ public class BruteCollinearPoints {
     private ArrayList<LineSegment> lines = new ArrayList<>();
     private int lineCount = 0;
 
-    // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
         assertNotNull(points);
-        Arrays.sort(points);
+        Point[] sortedPoints = points.clone();
+        Arrays.sort(sortedPoints);
+        assertNoDupes(sortedPoints);
 
-        int size = points.length;
+        int size = sortedPoints.length;
         for (int i = 0; i < size - 3; i++) {
             for (int j = i + 1; j < size - 2; j++) {
                 for (int k = j + 1; k < size - 1; k++) {
                     for (int m = k + 1; m < size; m++) {
-                        Point p = points[i];
-                        Point q = points[j];
-                        Point r = points[k];
-                        Point s = points[m];
-
-                        assertNotNull(p);
-                        assertNotNull(q);
-                        assertNotNull(r);
-                        assertNotNull(s);
+                        Point p = sortedPoints[i];
+                        Point q = sortedPoints[j];
+                        Point r = sortedPoints[k];
+                        Point s = sortedPoints[m];
 
                         double pq = p.slopeTo(q);
                         double pr = p.slopeTo(r);
                         double ps = p.slopeTo(s);
-
-                        assertNotDuplicate(pq);
-                        assertNotDuplicate(pr);
-                        assertNotDuplicate(ps);
 
                         // points are collinear
                         if (pq == pr && pr == ps) {
@@ -54,22 +46,23 @@ public class BruteCollinearPoints {
 
     private void assertNotNull(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
+        for (Point p : points) {
+            if (p == null) throw new IllegalArgumentException();
+        }
     }
 
-    private void assertNotNull(Point point) {
-        if (point == null) throw new IllegalArgumentException();
+    private void assertNoDupes(Point[] points) {
+        for (int i = 1; i < points.length; i++) {
+            if (points[i - 1].compareTo(points[i]) == 0) {
+                throw new IllegalArgumentException();
+            }
+        }
     }
 
-    private void assertNotDuplicate(double slope) {
-        if (slope == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-    }
-
-    // the number of line segments
     public int numberOfSegments() {
         return lineCount;
     }
 
-    // the line segments
     public LineSegment[] segments() {
         return lines.toArray(new LineSegment[this.lines.size()]);
     }
