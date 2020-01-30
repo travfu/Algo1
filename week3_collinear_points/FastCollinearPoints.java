@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
-    private Point[] points;  // sorted copy of input
     private Point[] aux;     // auxilliary array for finding lines
     private ArrayList<LineSegment> lines = new ArrayList<>();
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
         assertNotNull(points);
-        this.points = points.clone();
-        Arrays.sort(this.points);
-        assertValidArg(this.points);
+        Point[] sortedPoints = points.clone();
+        Arrays.sort(sortedPoints);
+        assertNoDupes(sortedPoints);
 
-        for (Point p : this.points) {
-            aux = this.points.clone();
+        for (Point p : sortedPoints) {
+            aux = sortedPoints.clone();
             Arrays.sort(aux, p.slopeOrder());
             findLines(p);
         }
@@ -24,12 +23,14 @@ public class FastCollinearPoints {
 
     private void assertNotNull(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
-    }
-
-    private void assertValidArg(Point[] points) {
-        Point prev = null;
         for (Point p : points) {
             if (p == null) throw new IllegalArgumentException();
+        }
+    }
+
+    private void assertNoDupes(Point[] points) {
+        Point prev = null;
+        for (Point p : points) {
             if (prev != null && prev.compareTo(p) == 0) {
                 throw new IllegalArgumentException();
             }
