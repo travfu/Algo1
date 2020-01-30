@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
     private Point[] aux;     // auxilliary array for finding lines
-    private ArrayList<LineSegment> lines = new ArrayList<>();
+    private final ArrayList<LineSegment> lines = new ArrayList<>();
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
@@ -89,15 +89,13 @@ public class FastCollinearPoints {
         double pq = p.slopeTo(q);
         double pr = p.slopeTo(r);
         double ps = p.slopeTo(s);
-        if (pq == pr && pr == ps) return true;
-        else return false;
+        return (pq == pr && pr == ps);
     }
 
     private boolean assertNotDuplicateLine(Point p, Point lineStart) {
         // Assumption: anything to the left of Point p, has already been
         // accounted for.
-        if (p.compareTo(lineStart) <= 0) return true;
-        else return false;
+        return (p.compareTo(lineStart) <= 0);
     }
 
     public int numberOfSegments() {
