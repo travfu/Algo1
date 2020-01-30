@@ -36,31 +36,35 @@ public class FastCollinearPoints {
     }
 
     private void findLines(Point p) {
-
         int lineStart = 0;
-        boolean lineFound = false;
-        for (int i = 1; i < aux.length - 2; i++) {
-            Point q = aux[i];
-            Point r = aux[i + 1];
-            Point s = aux[i + 2];
+        for (int i = 3; i < aux.length; i++) {
+            Point q = aux[i - 2];
+            Point r = aux[i - 1];
+            Point s = aux[i];
 
-            if (!lineFound && isCollinear(p, q, r, s)) {
-                // case 1: beginning of line found
-                lineFound = true;
-                lineStart = i;
-                if (i == aux.length - 3) {
-                    // case 3: beginning of line found at the end of the array
-                    int lineEnd = aux.length - 1;
-                    newLineSeg(p, lineStart, lineEnd);
+            if (isCollinear(p, q, r, s)) {
+                lineStart = i - 2;
+                int lineEnd = i;
+
+                // end of array -> add line segment
+                if (i == aux.length - 1) newLineSeg(p, lineStart, lineEnd);
+
+                // continue iteration until end of line segment
+                for (int j = i + 1; j < aux.length; j++) {
+                    Point nextPoint = aux[j];
+                    if (p.slopeTo(q) == p.slopeTo(nextPoint)) {
+                        lineEnd = j;
+                        if (j == aux.length - 1) {
+                            newLineSeg(p, lineStart, lineEnd);
+                            i = j;
+                        }
+                    }
+                    else {
+                        newLineSeg(p, lineStart, lineEnd);
+                        i = j;
+                        break;
+                    }
                 }
-            }
-
-            else if (lineFound && !isCollinear(p, q, r, s) ||
-                    lineFound && i == aux.length - 3) {
-                // case 2: end of line found
-                lineFound = false;
-                int lineEnd = i + 1;
-                newLineSeg(p, lineStart, lineEnd);
             }
         }
     }
