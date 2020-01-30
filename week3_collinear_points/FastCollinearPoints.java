@@ -1,9 +1,10 @@
+import edu.princeton.cs.algs4.StdIn;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
     private Point[] aux;
-    private Point min = null;
     private ArrayList<LineSegment> lines = new ArrayList<>();
 
     // finds all line segments containing 4 or more points
@@ -35,6 +36,7 @@ public class FastCollinearPoints {
     }
 
     private void findLines(Point p) {
+
         int lineStart = 0;
         boolean lineFound = false;
         for (int i = 1; i < aux.length - 2; i++) {
@@ -43,33 +45,36 @@ public class FastCollinearPoints {
             Point s = aux[i + 2];
 
             if (!lineFound && isCollinear(p, q, r, s)) {
+                // case 1: beginning of line found
                 lineFound = true;
                 lineStart = i;
-            }
-
-            else if (lineFound && !isCollinear(p, q, r, s)) {
-                lineFound = false;
-                int lineEnd = i + 1;
-                int lineSize = lineEnd - lineStart + 2; // +1 for point p
-                if (lineSize >= 4) {
-                    LineSegment newLine;
-                    Point minPoint = aux[lineStart];
-                    if (p.compareTo(aux[lineStart]) < 0) {
-                        newLine = new LineSegment(p, aux[lineEnd]);
-                        minPoint = p;
-                    }
-                    else if (p.compareTo(aux[lineEnd]) > 0) {
-                        newLine = new LineSegment(aux[lineStart], p);
-                    }
-                    else {
-                        newLine = new LineSegment(aux[lineStart], aux[lineEnd]);
-                    }
-
-                    if (assertNotDuplicateLine(p, minPoint)) {
-                        lines.add(newLine);
-                    }
+                if (i == aux.length - 3) {
+                    // case 3: beginning of line found at the end of the array
+                    int lineEnd = aux.length - 1;
+                    newLineSeg(p, lineStart, lineEnd);
                 }
             }
+
+            else if (lineFound && !isCollinear(p, q, r, s) ||
+                    lineFound && i == aux.length - 3) {
+                // case 2: end of line found
+                lineFound = false;
+                int lineEnd = i + 1;
+                newLineSeg(p, lineStart, lineEnd);
+            }
+        }
+    }
+
+    private void newLineSeg(Point p, int lineStart, int lineEnd) {
+        int lineSize = lineEnd - lineStart + 2; // +1 for point p
+        if (lineSize >= 4) {
+            Point minPoint = aux[lineStart];
+            Point maxPoint = aux[lineEnd];
+            if (p.compareTo(minPoint) < 0) minPoint = p;      // p is min
+            else if (p.compareTo(maxPoint) > 0) maxPoint = p; // p is max
+
+            LineSegment newLine = new LineSegment(minPoint, maxPoint);
+            if (assertNotDuplicateLine(p, minPoint)) lines.add(newLine);
         }
     }
 
@@ -94,5 +99,23 @@ public class FastCollinearPoints {
 
     public LineSegment[] segments() {
         return lines.toArray(new LineSegment[this.lines.size()]);
+    }
+
+    public static void main(String[] args) {
+        int n = 0;
+        if (!StdIn.isEmpty()) n = StdIn.readInt();
+
+        Point[] points = new Point[n];
+        int i = 0;
+        while (!StdIn.isEmpty()) {
+            int x = StdIn.readInt();
+            int y = StdIn.readInt();
+            points[i++] = new Point(x, y);
+        }
+
+        FastCollinearPoints fast = new FastCollinearPoints(points);
+
+        System.out.println(fast.numberOfSegments());
+        for (LineSegment p : fast.segments()) System.out.println(p);
     }
 }
