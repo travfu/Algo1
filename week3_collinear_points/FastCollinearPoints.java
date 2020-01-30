@@ -1,5 +1,3 @@
-import edu.princeton.cs.algs4.StdIn;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -100,23 +98,5 @@ public class FastCollinearPoints {
 
     public LineSegment[] segments() {
         return lines.toArray(new LineSegment[this.lines.size()]);
-    }
-
-    public static void main(String[] args) {
-        int n = 0;
-        if (!StdIn.isEmpty()) n = StdIn.readInt();
-
-        Point[] points = new Point[n];
-        int i = 0;
-        while (!StdIn.isEmpty()) {
-            int x = StdIn.readInt();
-            int y = StdIn.readInt();
-            points[i++] = new Point(x, y);
-        }
-
-        FastCollinearPoints fast = new FastCollinearPoints(points);
-
-        System.out.println(fast.numberOfSegments());
-        for (LineSegment p : fast.segments()) System.out.println(p);
     }
 }

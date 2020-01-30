@@ -1,10 +1,8 @@
-import edu.princeton.cs.algs4.StdIn;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    private ArrayList<LineSegment> lines = new ArrayList<>();
+    private final ArrayList<LineSegment> lines = new ArrayList<>();
     private int lineCount = 0;
 
     public BruteCollinearPoints(Point[] points) {
@@ -65,34 +63,5 @@ public class BruteCollinearPoints {
 
     public LineSegment[] segments() {
         return lines.toArray(new LineSegment[this.lines.size()]);
-    }
-
-    public static void main(String[] args) {
-        class TestHelper {
-            public void pass(String txt) {
-                System.out.printf("  %-20s %s\n", txt, ".");
-            }
-
-            public void fail(String txt) {
-                System.out.printf("  %-20s %s\n", txt, "F");
-            }
-        }
-        TestHelper print = new TestHelper();
-
-        int n = 0;
-        if (!StdIn.isEmpty()) n = StdIn.readInt();
-
-        Point[] points = new Point[n];
-        int i = 0;
-        while (!StdIn.isEmpty()) {
-            int x = StdIn.readInt();
-            int y = StdIn.readInt();
-            points[i++] = new Point(x, y);
-        }
-
-        BruteCollinearPoints brute = new BruteCollinearPoints(points);
-
-        System.out.println(brute.numberOfSegments());
-        for (LineSegment line : brute.segments()) System.out.println(line);
     }
 }
