@@ -7,7 +7,6 @@ public class FastCollinearPoints {
     private Point[] aux;     // auxilliary array for finding lines
     private final ArrayList<LineSegment> lines = new ArrayList<>();
 
-    // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
         assertNotNull(points);
         Point[] sortedPoints = points.clone();
@@ -29,24 +28,21 @@ public class FastCollinearPoints {
     }
 
     private void assertNoDupes(Point[] points) {
-        Point prev = null;
-        for (Point p : points) {
-            if (prev != null && prev.compareTo(p) == 0) {
+        for (int i = 1; i < points.length; i++) {
+            if (points[i - 1].compareTo(points[i]) == 0) {
                 throw new IllegalArgumentException();
             }
-            prev = p;
         }
     }
 
     private void findLines(Point p) {
-        int lineStart = 0;
         for (int i = 3; i < aux.length; i++) {
             Point q = aux[i - 2];
             Point r = aux[i - 1];
             Point s = aux[i];
 
             if (isCollinear(p, q, r, s)) {
-                lineStart = i - 2;
+                int lineStart = i - 2;
                 int lineEnd = i;
 
                 // end of array -> add line segment
