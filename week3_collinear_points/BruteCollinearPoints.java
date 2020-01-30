@@ -37,7 +37,7 @@ public class BruteCollinearPoints {
 
                         // points are collinear
                         if (pq == pr && pr == ps) {
-                            lines.add(new LineSegment(p, q));
+                            lines.add(new LineSegment(p, s));
                             lineCount++;
                         }
                         // first 3 points are not collinear
@@ -99,8 +99,7 @@ public class BruteCollinearPoints {
 
         BruteCollinearPoints brute = new BruteCollinearPoints(points);
 
-        // should have 1 line segment
-        if (brute.numberOfSegments() == 2) print.pass("# of segments");
-        else print.fail("# of segments");
+        System.out.println(brute.numberOfSegments());
+        for (LineSegment line : brute.segments()) System.out.println(line);
     }
 }
