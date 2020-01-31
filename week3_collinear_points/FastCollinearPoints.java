@@ -76,7 +76,7 @@ public class FastCollinearPoints {
         if (lineSize < 4) return false;
         else {
             Point min = minPoint(p, aux[lineStart]);
-            return assertNotDuplicateLine(p, minPoint(p, min));
+            return assertNotDuplicateLine(p, min);
         }
     }
 
