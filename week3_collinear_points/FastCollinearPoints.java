@@ -34,48 +34,27 @@ public class FastCollinearPoints {
     }
 
     private void findLines(Point p) {
-        for (int i = 3; i < aux.length; i++) {
+        int i = 3;  // last index of first 3-tuple
+        int lastIndex = aux.length - 1;
+        while (i <= lastIndex) {
             Point q = aux[i - 2];
             Point r = aux[i - 1];
             Point s = aux[i];
 
             if (isCollinear(p, q, r, s)) {
-                int lineStart = i - 2;
+                int lineStart = i - 2;  // index of point, q
+
+                int j = i;
+                while (j < lastIndex && isCollinear(p, q, aux[++j])) {
+                    i++;
+                }
+
                 int lineEnd = i;
-
-                // end of array -> add line segment
-                if (i == aux.length - 1) newLineSeg(p, lineStart, lineEnd);
-
-                // continue iteration until end of line segment
-                for (int j = i + 1; j < aux.length; j++) {
-                    Point nextPoint = aux[j];
-                    if (p.slopeTo(q) == p.slopeTo(nextPoint)) {
-                        lineEnd = j;
-                        if (j == aux.length - 1) {
-                            newLineSeg(p, lineStart, lineEnd);
-                            i = j;
-                        }
-                    }
-                    else {
-                        newLineSeg(p, lineStart, lineEnd);
-                        i = j;
-                        break;
-                    }
+                if (isValidLine(p, lineStart, lineEnd)) {
+                    newLineSeg(p, lineStart, lineEnd);
                 }
             }
-        }
-    }
-
-    private void newLineSeg(Point p, int lineStart, int lineEnd) {
-        int lineSize = lineEnd - lineStart + 2; // +1 for point p
-        if (lineSize >= 4) {
-            Point minPoint = aux[lineStart];
-            Point maxPoint = aux[lineEnd];
-            if (p.compareTo(minPoint) < 0) minPoint = p;      // p is min
-            else if (p.compareTo(maxPoint) > 0) maxPoint = p; // p is max
-
-            LineSegment newLine = new LineSegment(minPoint, maxPoint);
-            if (assertNotDuplicateLine(p, minPoint)) lines.add(newLine);
+            i++;
         }
     }
 
@@ -86,10 +65,41 @@ public class FastCollinearPoints {
         return (pq == pr && pr == ps);
     }
 
+    private boolean isCollinear(Point p, Point q, Point x) {
+        double pq = p.slopeTo(q);
+        double px = p.slopeTo(x);
+        return (pq == px);
+    }
+
+    private boolean isValidLine(Point p, int lineStart, int lineEnd) {
+        int lineSize = lineEnd - lineStart + 2; // +1 for point p
+        if (lineSize < 4) return false;
+        else {
+            Point min = minPoint(p, aux[lineStart]);
+            return assertNotDuplicateLine(p, minPoint(p, min));
+        }
+    }
+
+    private Point minPoint(Point v, Point w) {
+        if (v.compareTo(w) < 0) return v;
+        else return w;
+    }
+
+    private Point maxPoint(Point v, Point w) {
+        if (v.compareTo(w) > 0) return v;
+        else return w;
+    }
+
     private boolean assertNotDuplicateLine(Point p, Point lineStart) {
         // Assumption: anything to the left of Point p, has already been
         // accounted for.
         return (p.compareTo(lineStart) <= 0);
+    }
+
+    private void newLineSeg(Point p, int lineStart, int lineEnd) {
+        Point min = minPoint(p, aux[lineStart]);
+        Point max = maxPoint(p, aux[lineEnd]);
+        lines.add(new LineSegment(min, max));
     }
 
     public int numberOfSegments() {
