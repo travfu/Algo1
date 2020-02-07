@@ -20,3 +20,7 @@ week3_collinear_points/*
 !week3_collinear_points/BruteCollinearPoints.java
 !week3_collinear_points/FastCollinearPoints.java
 !week3_collinear_points/Point.java
+
+week4_8puzzle/*
+!week4_8puzzle/Board.java
+!week4_8puzzle/Solver.java
