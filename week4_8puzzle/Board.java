@@ -43,10 +43,22 @@ public class Board {
     }
 
     // number of tiles out of place
-    // public int hamming()
+    public int hamming() {
+        int hammingSum = 0;
+        // iterate over each board tile (except last one, for empty tile, 0)
+        for (int i = 0; i < board.length - 1; i++) {
+            if (board[i] != i + 1) hammingSum++;
+        }
+        return hammingSum;
+    }
 
     // sum of Manhattan distances between tiles and goal
-    // public int manhattan()
+    public int manhattan() {
+        // Implement neighbors() first
+        int manhattanSum = 0;
+
+        return manhattanSum;
+    }
 
     // is this board the goal board?
     // public boolean isGoal()
@@ -109,25 +121,25 @@ public class Board {
         h.printResults(testCondition, testName);
 
         // hamming()
-        board = h.getBoard("puzzle3x3-01.txt");
+        board = h.getBoard("puzzle3x3-05.txt");
         testName = "hamming() [1]";
-        testCondition = board.hamming() == 1;
+        testCondition = board.hamming() == 5;
         h.printResults(testCondition, testName);
 
-        board = h.getBoard("puzzle3x3-05.txt");
+        board = h.getBoard("puzzle4x4-10.txt");
         testName = "hamming() [2]";
-        testCondition = board.hamming() == 5;
+        testCondition = board.hamming() == 7;
         h.printResults(testCondition, testName);
 
         // manhattan()
         board = h.getBoard("puzzle3x3-05.txt");
         testName = "manhattan() [1]";
-        testCondition = board.manhattan == 5;
+        testCondition = board.manhattan() == 5;
         h.printResults(testCondition, testName);
 
         board = h.getBoard("puzzle3x3-20.txt");
         testName = "manhattan() [2]";
-        testCondition = board.manhattan == 12;
+        testCondition = board.manhattan() == 12;
         h.printResults(testCondition, testName);
 
     }
