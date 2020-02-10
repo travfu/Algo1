@@ -61,10 +61,24 @@ public class Board {
     }
 
     // is this board the goal board?
-    // public boolean isGoal()
+    public boolean isGoal() {
+        // -1 to accommodate empty tile at end
+        for (int i = 0; i < board.length - 1; i++) {
+            int goalTileValue = i + 1;
+            if (board[i] != goalTileValue) return false;
+        }
+        return true;
+    }
 
     // does this board equal y?
-    // public boolean equals(Object y)
+    public boolean equals(Object y) {
+        String thisClassName = this.getClass().getName();
+        String thatClassName = y.getClass().getName();
+        if (thisClassName.equals(thatClassName)) {
+            return toString().equals(y.toString());
+        }
+        else return false;
+    }
 
     // all neighboring boards
     // public Iterable<Board> neighbors()
@@ -104,6 +118,8 @@ public class Board {
 
         // Test vars
         Board board;
+        Board board1;
+        Board board2;
         String testName;
         boolean testCondition;
 
@@ -140,6 +156,21 @@ public class Board {
         board = h.getBoard("puzzle3x3-20.txt");
         testName = "manhattan() [2]";
         testCondition = board.manhattan() == 12;
+        h.printResults(testCondition, testName);
+
+        // isGoal()
+        board = h.getBoard("puzzle4x4-00.txt");
+        board1 = h.getBoard("puzzle4x4-01.txt");
+        testName = "isGoal()";
+        testCondition = board.isGoal() == true && board1.isGoal() == false;
+        h.printResults(testCondition, testName);
+
+        // equals()
+        board = h.getBoard("puzzle4x4-00.txt");
+        board1 = h.getBoard("puzzle4x4-00.txt");
+        board2 = h.getBoard("puzzle4x4-01.txt");
+        testName = "equals()";
+        testCondition = board.equals(board1) == true && board.equals(board2) == false;
         h.printResults(testCondition, testName);
 
     }
