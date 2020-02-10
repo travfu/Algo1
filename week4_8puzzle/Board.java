@@ -1,4 +1,4 @@
-import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.In;
 
 public class Board {
     private final int n;
@@ -39,7 +39,7 @@ public class Board {
     // unit testing (not graded)
     public static void main(String[] args) {
         class TestHelper {
-            public void results(boolean condition, String testName) {
+            public void printResults(boolean condition, String testName) {
                 if (condition) pass(testName);
                 else fail(testName);
             }
@@ -51,30 +51,36 @@ public class Board {
             private void fail(String txt) {
                 System.out.printf("  %-20s %s\n", txt, "F");
             }
-        }
-        TestHelper print = new TestHelper();
 
-        // prepare input
-        int n = 0;
-        if (!StdIn.isEmpty()) n = StdIn.readInt();
-
-        int[][] tiles = new int[n][n];
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                tiles[row][col] = StdIn.readInt();
+            public Board getBoard(String filename) {
+                In in = new In(filename);
+                int d = in.readInt();  // board dimensions
+                int[][] tiles = new int[d][d];
+                for (int row = 0; row < d; row++) {
+                    for (int col = 0; col < d; col++) {
+                        tiles[row][col] = in.readInt();
+                    }
+                }
+                return new Board(tiles);
             }
         }
-        Board board = new Board(tiles);
+        TestHelper h = new TestHelper();
 
-        // Tests
+        // Test vars
+        Board board;
         String testName;
         boolean testCondition;
 
         // dimension()
+        board = h.getBoard("puzzle00.txt");
         testName = "dimension()";
-        testCondition = board.dimension() == n;
-        print.results(testCondition, testName);
+        testCondition = board.dimension() == 10;
+        h.printResults(testCondition, testName);
 
+        // toString()
+        board = h.getBoard("puzzle3x3-00.txt");
+        testName = "toString()";
+        testCondition = board.toString() == "3\n 1  2  3 \n 4  5  6 \n 7  8  0 ";
 
     }
 
