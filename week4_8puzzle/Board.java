@@ -108,6 +108,28 @@ public class Board {
         testCondition = board.toString().equals(e);
         h.printResults(testCondition, testName);
 
+        // hamming()
+        board = h.getBoard("puzzle3x3-01.txt");
+        testName = "hamming() [1]";
+        testCondition = board.hamming() == 1;
+        h.printResults(testCondition, testName);
+
+        board = h.getBoard("puzzle3x3-05.txt");
+        testName = "hamming() [2]";
+        testCondition = board.hamming() == 5;
+        h.printResults(testCondition, testName);
+
+        // manhattan()
+        board = h.getBoard("puzzle3x3-05.txt");
+        testName = "manhattan() [1]";
+        testCondition = board.manhattan == 5;
+        h.printResults(testCondition, testName);
+
+        board = h.getBoard("puzzle3x3-20.txt");
+        testName = "manhattan() [2]";
+        testCondition = board.manhattan == 12;
+        h.printResults(testCondition, testName);
+
     }
 
 }
