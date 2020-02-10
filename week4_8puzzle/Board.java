@@ -8,10 +8,34 @@ public class Board {
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
         n = tiles.length;
+        board = setupBoard(tiles);
+    }
+
+    private int[] setupBoard(int[][] tiles) {
+        int arraySize = n * n;
+        int[] newBoard = new int[arraySize];
+
+        int i = 0;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                newBoard[i++] = tiles[row][col];
+            }
+        }
+        return newBoard;
     }
 
     // string representation of this board
-    // public String toString()
+    public String toString() {
+        String str = Integer.toString(n);
+        for (int row = 0; row < n; row++) {
+            str = str.concat("\n");
+            for (int col = 0; col < n; col++) {
+                int i = (row * n) + col;
+                str = str.concat(" " + Integer.toString(board[i]));
+            }
+        }
+        return str;
+    }
 
     // board dimension n
     public int dimension() {
@@ -80,7 +104,9 @@ public class Board {
         // toString()
         board = h.getBoard("puzzle3x3-00.txt");
         testName = "toString()";
-        testCondition = board.toString() == "3\n 1  2  3 \n 4  5  6 \n 7  8  0 ";
+        String e = "3\n 1 2 3\n 4 5 6\n 7 8 0";
+        testCondition = board.toString().equals(e);
+        h.printResults(testCondition, testName);
 
     }
 
