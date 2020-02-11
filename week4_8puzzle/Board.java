@@ -2,13 +2,13 @@ import edu.princeton.cs.algs4.In;
 
 public class Board {
     private final int n;
-    private int[] board;
+    private int[][] board1;
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
         n = tiles.length;
-        board = setupBoard(tiles);
+        board1 = copy(tiles);
     }
 
     private int[] setupBoard(int[][] tiles) {
@@ -24,14 +24,23 @@ public class Board {
         return newBoard;
     }
 
+    private int[][] copy(int[][] tiles) {
+        int[][] newBoard = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                newBoard[i][j] = tiles[i][j];
+            }
+        }
+        return newBoard;
+    }
+
     // string representation of this board
     public String toString() {
         String str = Integer.toString(n);
         for (int row = 0; row < n; row++) {
             str = str.concat("\n");
             for (int col = 0; col < n; col++) {
-                int i = (row * n) + col;
-                str = str.concat(" " + Integer.toString(board[i]));
+                str = str.concat(" " + Integer.toString(board1[row][col]));
             }
         }
         return str;
@@ -45,9 +54,13 @@ public class Board {
     // number of tiles out of place
     public int hamming() {
         int hammingSum = 0;
-        // iterate over each board tile (except last one, for empty tile, 0)
-        for (int i = 0; i < board.length - 1; i++) {
-            if (board[i] != i + 1) hammingSum++;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int expectedTile = (row * n) + col + 1;
+                if (board1[row][col] != 0 && board1[row][col] != expectedTile) {
+                    hammingSum++;
+                }
+            }
         }
         return hammingSum;
     }
@@ -62,10 +75,12 @@ public class Board {
 
     // is this board the goal board?
     public boolean isGoal() {
-        // -1 to accommodate empty tile at end
-        for (int i = 0; i < board.length - 1; i++) {
-            int goalTileValue = i + 1;
-            if (board[i] != goalTileValue) return false;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int expectedTile = (row * n) + col + 1;
+                if (row == n - 1 && col == n - 1) continue;
+                if (board1[row][col] != expectedTile) return false;
+            }
         }
         return true;
     }
