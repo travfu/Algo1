@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -143,7 +144,18 @@ public class Board {
     }
 
     // a board that is obtained by exchanging any pair of tiles
-    // public Board twin()
+    public Board twin() {
+        Board twinBoard = new Board(board);
+        int row1, col1, row2, col2;
+        do {
+            row1 = StdRandom.uniform(n);
+            col1 = StdRandom.uniform(n);
+            row2 = StdRandom.uniform(n);
+            col2 = StdRandom.uniform(n);
+        } while (row1 == row2 && col1 == col2);
+        twinBoard.swap(row1, col1, row2, col2);
+        return twinBoard;
+    }
 
     // unit testing (not graded)
     public static void main(String[] args) {
@@ -181,7 +193,7 @@ public class Board {
         Board board2;
         String testName;
         boolean testCondition;
-        int i = 0;
+        int index = 0;
 
         // dimension()
         board = h.getBoard("puzzle00.txt");
@@ -271,9 +283,9 @@ public class Board {
         board = new Board(ogBoard);
 
         testCondition = true;
-        i = 0;
+        index = 0;
         for (Board x : board.neighbors()) {
-            if (!Arrays.deepEquals(x.board, nBoards[i++])) {
+            if (!Arrays.deepEquals(x.board, nBoards[index++])) {
                 testCondition = false;
                 break;
             }
@@ -295,13 +307,26 @@ public class Board {
         board = new Board(ogBoard1);
 
         testCondition = true;
-        i = 0;
+        index = 0;
         for (Board x : board.neighbors()) {
-            if (!Arrays.deepEquals(x.board, nBoards1[i++])) {
+            if (!Arrays.deepEquals(x.board, nBoards1[index++])) {
                 testCondition = false;
                 break;
             }
         }
+        h.printResults(testCondition, testName);
+
+        // twin()
+        testName = "twin()";
+        board = h.getBoard("puzzle2x2-01.txt");
+        Board twinBoard = board.twin();
+        int diffCount = 0;
+        for (int i = 0; i < board.n; i++) {
+            for (int j = 0; j < board.n; j++) {
+                if (board.board[i][j] != twinBoard.board[i][j]) diffCount++;
+            }
+        }
+        testCondition = diffCount == 2;
         h.printResults(testCondition, testName);
     }
 }
