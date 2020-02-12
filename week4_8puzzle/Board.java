@@ -7,25 +7,14 @@ import java.util.LinkedList;
 public class Board {
     private final int n;
     private int[][] board;
+    private final int indexOffset = 1;  // array to board offset value
+    private final int emptyTile = 0;    // value of empty tile
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
         n = tiles.length;
         board = copy(tiles);
-    }
-
-    private int[] setupBoard(int[][] tiles) {
-        int arraySize = n * n;
-        int[] newBoard = new int[arraySize];
-
-        int i = 0;
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                newBoard[i++] = tiles[row][col];
-            }
-        }
-        return newBoard;
     }
 
     private int[][] copy(int[][] tiles) {
@@ -58,10 +47,12 @@ public class Board {
     // number of tiles out of place
     public int hamming() {
         int hammingSum = 0;
+        int expected = 0;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                int expectedTile = (row * n) + col + 1;
-                if (board[row][col] != 0 && board[row][col] != expectedTile) {
+                expected++;
+                int tileValue = board[row][col];
+                if (tileValue != emptyTile && tileValue != expected) {
                     hammingSum++;
                 }
             }
@@ -75,10 +66,10 @@ public class Board {
         int expected = 1;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                if (board[row][col] != expected++ && board[row][col] != 0) {
+                if (board[row][col] != expected++ && board[row][col] != emptyTile) {
                     int tileValue = board[row][col];
-                    int goalCol = (tileValue - 1) % n;
-                    int goalRow = (tileValue - goalCol - 1) / n;
+                    int goalCol = (tileValue - indexOffset) % n;
+                    int goalRow = (tileValue - goalCol - indexOffset) / n;
                     int rowDiff = row - goalRow;
                     int colDiff = col - goalCol;
                     manhattanSum += Math.abs(rowDiff) + Math.abs(colDiff);
@@ -90,11 +81,14 @@ public class Board {
 
     // is this board the goal board?
     public boolean isGoal() {
+        int expected = 0;
+        int lastCol = n - indexOffset;
+        int lastRow = n - indexOffset;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                int expectedTile = (row * n) + col + 1;
-                if (row == n - 1 && col == n - 1) continue;
-                if (board[row][col] != expectedTile) return false;
+                expected++;
+                if (row == lastRow && col == lastCol) continue; // expected empty
+                if (board[row][col] != expected) return false;
             }
         }
         return true;
@@ -115,7 +109,7 @@ public class Board {
         LinkedList<Board> boards = new LinkedList<Board>();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (board[i][j] == 0) {
+                if (board[i][j] == emptyTile) {
                     if (hasTop(i, j)) boards.add(getNeighBoard(i, j, i - 1, j));
                     if (hasLeft(i, j)) boards.add(getNeighBoard(i, j, i, j - 1));
                     if (hasBot(i, j)) boards.add(getNeighBoard(i, j, i + 1, j));
@@ -127,19 +121,23 @@ public class Board {
     }
 
     private boolean hasLeft(int row, int col) {
-        return col > 0;
+        int leftEdgeCol = 0;
+        return col > leftEdgeCol;
     }
 
     private boolean hasRight(int row, int col) {
-        return col < n - 1;
+        int rightEdgeCol = n - indexOffset;
+        return col < rightEdgeCol;
     }
 
     private boolean hasTop(int row, int col) {
-        return row > 0;
+        int topEdgeRow = 0;
+        return row > topEdgeRow;
     }
 
     private boolean hasBot(int row, int col) {
-        return row < n - 1;
+        int botEdgeRow = n - indexOffset;
+        return row < botEdgeRow;
     }
 
     private void swap(int row1, int col1, int row2, int col2) {
@@ -281,7 +279,7 @@ public class Board {
         }
         h.printResults(testCondition, testName);
 
-        // neighbors()
+        // neighbors() [1]
         //   original:   neighbor 1:   neighbor 2:
         //     1 2 3       1 2 3         1 2 3
         //     4 5 6       4 5 0         4 5 6
@@ -303,7 +301,7 @@ public class Board {
         }
         h.printResults(testCondition, testName);
 
-        // neighbors()
+        // neighbors() [2]
         //   original:   neighbor 1:   neighbor 2:   neighbor 3:   neighbor 4:
         //     1 2 3       1 0 3         1 2 3         1 2 3         1 2 3
         //     4 0 5       4 2 5         0 4 5         4 7 5         4 5 0
