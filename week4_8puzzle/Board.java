@@ -47,12 +47,9 @@ public class Board {
     // number of tiles out of place
     public int hamming() {
         int hammingSum = 0;
-        int expected = 0;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                expected++;
-                int tileValue = board[row][col];
-                if (tileValue != emptyTile && tileValue != expected) {
+                if (!isEmpty(row, col) && !correctPosition(row, col)) {
                     hammingSum++;
                 }
             }
@@ -60,35 +57,45 @@ public class Board {
         return hammingSum;
     }
 
+    private boolean isEmpty(int row, int col) {
+        return board[row][col] == emptyTile;
+    }
+
+    private boolean correctPosition(int row, int col) {
+        int expected = (row * n) + (col + indexOffset);
+        return board[row][col] == expected;
+    }
+
     // sum of Manhattan distances between tiles and goal
     public int manhattan() {
         int manhattanSum = 0;
-        int expected = 1;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                if (board[row][col] != expected++ && board[row][col] != emptyTile) {
-                    int tileValue = board[row][col];
-                    int goalCol = (tileValue - indexOffset) % n;
-                    int goalRow = (tileValue - goalCol - indexOffset) / n;
-                    int rowDiff = row - goalRow;
-                    int colDiff = col - goalCol;
-                    manhattanSum += Math.abs(rowDiff) + Math.abs(colDiff);
+                if (!correctPosition(row, col) && !isEmpty(row, col)) {
+                    manhattanSum += calcManhattanMoves(row, col);
                 }
             }
         }
         return manhattanSum;
     }
 
+    private int calcManhattanMoves(int row, int col) {
+        int tileValue = board[row][col];
+        int goalCol = (tileValue - indexOffset) % n;
+        int goalRow = (tileValue - goalCol - indexOffset) / n;
+        int rowDiff = row - goalRow;
+        int colDiff = col - goalCol;
+        return Math.abs(rowDiff) + Math.abs(colDiff);
+    }
+
     // is this board the goal board?
     public boolean isGoal() {
-        int expected = 0;
         int lastCol = n - indexOffset;
         int lastRow = n - indexOffset;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                expected++;
                 if (row == lastRow && col == lastCol) continue; // expected empty
-                if (board[row][col] != expected) return false;
+                if (!correctPosition(row, col)) return false;
             }
         }
         return true;
@@ -107,13 +114,13 @@ public class Board {
     // all neighboring boards
     public Iterable<Board> neighbors() {
         LinkedList<Board> boards = new LinkedList<Board>();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (board[i][j] == emptyTile) {
-                    if (hasTop(i, j)) boards.add(getNeighBoard(i, j, i - 1, j));
-                    if (hasLeft(i, j)) boards.add(getNeighBoard(i, j, i, j - 1));
-                    if (hasBot(i, j)) boards.add(getNeighBoard(i, j, i + 1, j));
-                    if (hasRight(i, j)) boards.add(getNeighBoard(i, j, i, j + 1));
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                if (isEmpty(r, c)) {
+                    if (hasTop(r, c)) boards.add(getNeighBoard(r, c, r - 1, c));
+                    if (hasLeft(r, c)) boards.add(getNeighBoard(r, c, r, c - 1));
+                    if (hasBot(r, c)) boards.add(getNeighBoard(r, c, r + 1, c));
+                    if (hasRight(r, c)) boards.add(getNeighBoard(r, c, r, c + 1));
                 }
             }
         }
