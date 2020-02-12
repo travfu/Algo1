@@ -205,58 +205,58 @@ public class Board {
         int index = 0;
 
         // dimension()
-        board = h.getBoard("puzzle00.txt");
         testName = "dimension()";
+        board = h.getBoard("puzzle00.txt");
         testCondition = board.dimension() == 10;
         h.printResults(testCondition, testName);
 
         // toString()
-        board = h.getBoard("puzzle3x3-00.txt");
         testName = "toString()";
+        board = h.getBoard("puzzle3x3-00.txt");
         String e = "3\n 1 2 3\n 4 5 6\n 7 8 0";
         testCondition = board.toString().equals(e);
         h.printResults(testCondition, testName);
 
         // hamming()
-        board = h.getBoard("puzzle3x3-05.txt");
         testName = "hamming() [1]";
+        board = h.getBoard("puzzle3x3-05.txt");
         testCondition = board.hamming() == 5;
         h.printResults(testCondition, testName);
 
-        board = h.getBoard("puzzle4x4-10.txt");
         testName = "hamming() [2]";
+        board = h.getBoard("puzzle4x4-10.txt");
         testCondition = board.hamming() == 7;
         h.printResults(testCondition, testName);
 
         // manhattan()
-        board = h.getBoard("puzzle3x3-05.txt");
         testName = "manhattan() [1]";
+        board = h.getBoard("puzzle3x3-05.txt");
         testCondition = board.manhattan() == 5;
         h.printResults(testCondition, testName);
 
-        board = h.getBoard("puzzle3x3-20.txt");
         testName = "manhattan() [2]";
+        board = h.getBoard("puzzle3x3-20.txt");
         testCondition = board.manhattan() == 12;
         h.printResults(testCondition, testName);
 
         // isGoal()
+        testName = "isGoal()";
         board = h.getBoard("puzzle4x4-00.txt");
         board1 = h.getBoard("puzzle4x4-01.txt");
-        testName = "isGoal()";
         testCondition = board.isGoal() == true && board1.isGoal() == false;
         h.printResults(testCondition, testName);
 
         // equals()
+        testName = "equals()";
         board = h.getBoard("puzzle4x4-00.txt");
         board1 = h.getBoard("puzzle4x4-00.txt");
         board2 = h.getBoard("puzzle4x4-01.txt");
-        testName = "equals()";
         testCondition = board.equals(board1) == true && board.equals(board2) == false;
         h.printResults(testCondition, testName);
 
         // swap()
-        board = h.getBoard("puzzle01.txt");
         testName = "swap()";
+        board = h.getBoard("puzzle01.txt");
         // puzzle01.txt
         //  1  0
         //  3  2
