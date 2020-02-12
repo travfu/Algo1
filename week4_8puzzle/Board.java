@@ -1,14 +1,16 @@
 import edu.princeton.cs.algs4.In;
 
+import java.util.LinkedList;
+
 public class Board {
     private final int n;
-    private int[][] board1;
+    private int[][] board;
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
         n = tiles.length;
-        board1 = copy(tiles);
+        board = copy(tiles);
     }
 
     private int[] setupBoard(int[][] tiles) {
@@ -40,7 +42,7 @@ public class Board {
         for (int row = 0; row < n; row++) {
             str = str.concat("\n");
             for (int col = 0; col < n; col++) {
-                str = str.concat(" " + Integer.toString(board1[row][col]));
+                str = str.concat(" " + Integer.toString(board[row][col]));
             }
         }
         return str;
@@ -57,7 +59,7 @@ public class Board {
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 int expectedTile = (row * n) + col + 1;
-                if (board1[row][col] != 0 && board1[row][col] != expectedTile) {
+                if (board[row][col] != 0 && board[row][col] != expectedTile) {
                     hammingSum++;
                 }
             }
@@ -79,7 +81,7 @@ public class Board {
             for (int col = 0; col < n; col++) {
                 int expectedTile = (row * n) + col + 1;
                 if (row == n - 1 && col == n - 1) continue;
-                if (board1[row][col] != expectedTile) return false;
+                if (board[row][col] != expectedTile) return false;
             }
         }
         return true;
@@ -96,7 +98,12 @@ public class Board {
     }
 
     // all neighboring boards
-    // public Iterable<Board> neighbors()
+    public Iterable<Board> neighbors() {
+        LinkedList<Board> boards = new LinkedList<Board>();
+
+        return boards;
+    }
+
 
     // a board that is obtained by exchanging any pair of tiles
     // public Board twin()
