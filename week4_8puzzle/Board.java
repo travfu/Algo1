@@ -71,9 +71,20 @@ public class Board {
 
     // sum of Manhattan distances between tiles and goal
     public int manhattan() {
-        // Implement neighbors() first
         int manhattanSum = 0;
-
+        int expected = 1;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                if (board[row][col] != expected++ && board[row][col] != 0) {
+                    int tileValue = board[row][col];
+                    int goalCol = (tileValue - 1) % n;
+                    int goalRow = (tileValue - goalCol - 1) / n;
+                    int rowDiff = row - goalRow;
+                    int colDiff = col - goalCol;
+                    manhattanSum += Math.abs(rowDiff) + Math.abs(colDiff);
+                }
+            }
+        }
         return manhattanSum;
     }
 
