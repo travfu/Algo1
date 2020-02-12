@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.In;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Board {
@@ -100,10 +101,46 @@ public class Board {
     // all neighboring boards
     public Iterable<Board> neighbors() {
         LinkedList<Board> boards = new LinkedList<Board>();
-
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 0) {
+                    if (hasTop(i, j)) boards.add(getNeighBoard(i, j, i - 1, j));
+                    if (hasLeft(i, j)) boards.add(getNeighBoard(i, j, i, j - 1));
+                    if (hasBot(i, j)) boards.add(getNeighBoard(i, j, i + 1, j));
+                    if (hasRight(i, j)) boards.add(getNeighBoard(i, j, i, j + 1));
+                }
+            }
+        }
         return boards;
     }
 
+    private boolean hasLeft(int row, int col) {
+        return col > 0;
+    }
+
+    private boolean hasRight(int row, int col) {
+        return col < n - 1;
+    }
+
+    private boolean hasTop(int row, int col) {
+        return row > 0;
+    }
+
+    private boolean hasBot(int row, int col) {
+        return row < n - 1;
+    }
+
+    private void swap(int row1, int col1, int row2, int col2) {
+        int temp = board[row1][col1];
+        board[row1][col1] = board[row2][col2];
+        board[row2][col2] = temp;
+    }
+
+    private Board getNeighBoard(int row1, int col1, int row2, int col2) {
+        Board newBoard = new Board(board);
+        newBoard.swap(row1, col1, row2, col2);
+        return newBoard;
+    }
 
     // a board that is obtained by exchanging any pair of tiles
     // public Board twin()
@@ -144,6 +181,7 @@ public class Board {
         Board board2;
         String testName;
         boolean testCondition;
+        int i = 0;
 
         // dimension()
         board = h.getBoard("puzzle00.txt");
@@ -195,6 +233,77 @@ public class Board {
         testCondition = board.equals(board1) == true && board.equals(board2) == false;
         h.printResults(testCondition, testName);
 
-    }
+        // swap()
+        board = h.getBoard("puzzle01.txt");
+        testName = "swap()";
+        // puzzle01.txt
+        //  1  0
+        //  3  2
+        // swap tiles 3 and 2
+        board.swap(1, 0, 1, 1);
+        int[][] eBoard = new int[2][2];
+        eBoard[0][0] = 1;
+        eBoard[0][1] = 0;
+        eBoard[1][0] = 2;
+        eBoard[1][1] = 3;
 
+        testCondition = true;
+        for (int row = 0; row < 2; row++) {
+            for (int col = 0; col < 2; col++) {
+                if (board.board[row][col] != eBoard[row][col]) {
+                    testCondition = false;
+                    break;
+                }
+            }
+        }
+        h.printResults(testCondition, testName);
+
+        // neighbors()
+        //   original:   neighbor 1:   neighbor 2:
+        //     1 2 3       1 2 3         1 2 3
+        //     4 5 6       4 5 0         4 5 6
+        //     7 8 0       7 8 6         7 0 8
+        testName = "neighbors() [1]";
+        int[][] ogBoard = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
+        int[][] nBoard1 = { { 1, 2, 3 }, { 4, 5, 0 }, { 7, 8, 6 } };
+        int[][] nBoard2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } };
+        int[][][] nBoards = { nBoard1, nBoard2 };
+        board = new Board(ogBoard);
+
+        testCondition = true;
+        i = 0;
+        for (Board x : board.neighbors()) {
+            if (!Arrays.deepEquals(x.board, nBoards[i++])) {
+                testCondition = false;
+                break;
+            }
+        }
+        h.printResults(testCondition, testName);
+
+        // neighbors()
+        //   original:   neighbor 1:   neighbor 2:   neighbor 3:   neighbor 4:
+        //     1 2 3       1 0 3         1 2 3         1 2 3         1 2 3
+        //     4 0 5       4 2 5         0 4 5         4 7 5         4 5 0
+        //     6 7 8       6 7 8         6 7 8         6 0 8         6 7 8
+        testName = "neighbors() [2]";
+        int[][] ogBoard1 = { { 1, 2, 3 }, { 4, 0, 5 }, { 6, 7, 8 } };
+        int[][] nBoard11 = { { 1, 0, 3 }, { 4, 2, 5 }, { 6, 7, 8 } };
+        int[][] nBoard12 = { { 1, 2, 3 }, { 0, 4, 5 }, { 6, 7, 8 } };
+        int[][] nBoard13 = { { 1, 2, 3 }, { 4, 7, 5 }, { 6, 0, 8 } };
+        int[][] nBoard14 = { { 1, 2, 3 }, { 4, 5, 0 }, { 6, 7, 8 } };
+        int[][][] nBoards1 = { nBoard11, nBoard12, nBoard13, nBoard14 };
+        board = new Board(ogBoard1);
+
+        testCondition = true;
+        i = 0;
+        for (Board x : board.neighbors()) {
+            if (!Arrays.deepEquals(x.board, nBoards1[i++])) {
+                testCondition = false;
+                break;
+            }
+        }
+        h.printResults(testCondition, testName);
+    }
 }
+
+
